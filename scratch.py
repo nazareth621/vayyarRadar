@@ -27,7 +27,7 @@ def to_message(buffer):
     fields_len = unpack_from('i', buffer, seek + 4)[0]
     fields_split = unpack_from(str(fields_len) + 's', buffer, seek + 8)[0].decode('utf8').split(ASCII_RS)
     msg = {'ID': fields_split[0], 'Payload':
-dict.fromkeys(fields_split[1].split(ASCII_US))}
+        dict.fromkeys(fields_split[1].split(ASCII_US))}
     seek += 8 + fields_len
     for key in msg['Payload']:
         seek += np.int32().nbytes
@@ -42,6 +42,7 @@ dict.fromkeys(fields_split[1].split(ASCII_US))}
         msg['Payload'][key] = data.reshape(dims) if ndims else np.asscalar(data)
     return msg
 
+
 def main():
     # """ connect to server and echoing messages """
     listener = create_connection("ws://127.0.0.1:1234/")
@@ -50,14 +51,14 @@ def main():
         'Type': 'COMMAND',
         'ID': 'SET_PARAMS',
         'Payload': {
-            'Cfg.MonitoredRoomDims': [-0.1, 2, 0.5, 3, 0.2, 1.8],# Room dimensions
-            'Cfg.Common.sensorOrientation.mountPlane':'xz',#xy - ceiling, xz - wall
-            'Cfg.Common.sensorOrientation.transVec[3]': [1.8],# Height of sensor
-            'Cfg.imgProcessing.substractionMode':6, #6-AMTI,7-MTI,2-Initial,0-NS.
-            'MPR.save_dir': r'', # Saved records directory
-            'MPR.read_from_file': 0.0, # 1 – To play records
-            'MPR.save_to_file': 0.0, # 1 – To save raw data
-            'MPR.save_image_to_file': 0.0, # 1 – To save image data
+            'Cfg.MonitoredRoomDims': [-0.1, 2, 0.5, 3, 0.2, 1.8],  # Room dimensions
+            'Cfg.Common.sensorOrientation.mountPlane': 'xz',  # xy - ceiling, xz - wall
+            'Cfg.Common.sensorOrientation.transVec[3]': [1.8],  # Height of sensor
+            'Cfg.imgProcessing.substractionMode': 6,  # 6-AMTI,7-MTI,2-Initial,0-NS.
+            'MPR.save_dir': r'',  # Saved records directory
+            'MPR.read_from_file': 0.0,  # 1 – To play records
+            'MPR.save_to_file': 0.0,  # 1 – To save raw data
+            'MPR.save_image_to_file': 0.0,  # 1 – To save image data
         }
     }))
 
@@ -66,7 +67,7 @@ def main():
         'Type': 'COMMAND',
         'ID': 'SET_OUTPUTS',
         'Payload': {
-            'binary_outputs': ['I', 'Q', 'pairs', 'freqs' ,'rawImage_XYZ', 'rawImage_XY', 'rawImage_XZ', 'rawImage_YZ'],
+            'binary_outputs': ['I', 'Q', 'pairs', 'freqs', 'rawImage_XYZ', 'rawImage_XY', 'rawImage_XZ', 'rawImage_YZ'],
         }
     }))
 
@@ -111,5 +112,6 @@ def main():
                 print(key, data['Payload'][key])
     listener.close()
 
-    if name == 'main':
-        main()
+
+if __name__ == '__main__':
+    main()
